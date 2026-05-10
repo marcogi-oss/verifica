@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cassaforte della Classe</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    background: radial-gradient(ellipse at 50% 30%, #2c2c2c 0%, #111 100%);
+    font-family: 'Segoe UI', sans-serif;
+    padding: 20px;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 8px 18px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 6px;
+    color: #d4a843;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .back-btn:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(201,168,76,0.6);
+  }
+
+  h1 {
+    color: #d4a843;
+    font-size: 1.6em;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 8px rgba(212,168,67,0.4);
+    text-align: center;
+  }
+
+  /* Layout cassaforte + colonne indizi */
+  .cassaforte-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    padding: 0 16px 40px;
+    box-sizing: border-box;
+  }
+
+  .hints-col {
+    flex: 0 0 260px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(212,168,67,0.4);
+    border-radius: 12px;
+    padding: 18px 16px;
+    margin-top: 10px;
+    min-width: 0;
+  }
+
+  .hints-title {
+    font-size: 0.75em;
+    font-weight: 700;
+    color: #d4a843;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(212,168,67,0.2);
+    padding-bottom: 10px;
+  }
+
+  .hints-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .hints-list li {
+    font-size: 0.8em;
+    color: #c8b896;
+    line-height: 1.55;
+    padding: 8px 0 8px 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .hints-list li:last-child { border-bottom: none; }
+  .hints-list li .num {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 20px;
+    height: 20px;
+    background: #8a6a20;
+    border: 1px solid #d4a843;
+    border-radius: 50%;
+    font-size: 0.75em;
+    font-weight: 700;
+    color: #d4a843;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scene {
+    perspective: 1400px;
+    margin-bottom: 30px;
+    flex-shrink: 0;
+  }
+
+  .safe-wrap {
+    position: relative;
+    width: 560px;
+    height: 650px;
+    transform-style: preserve-3d;
+  }
+
+  /* === CORPO === */
+  .safe-body {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #4a4a4a 0%, #2a2a2a 40%, #1a1a1a 100%);
+    border-radius: 18px;
+    border: 6px solid #111;
+    box-shadow:
+      inset -8px 0 20px rgba(0,0,0,0.7),
+      inset 0 -10px 25px rgba(0,0,0,0.5),
+      inset 4px 4px 12px rgba(255,255,255,0.05),
+      0 30px 80px rgba(0,0,0,0.9);
+  }
+
+  .rivet {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: radial-gradient(circle at 35% 35%, #888, #333);
+    border-radius: 50%;
+    border: 2px solid #222;
+    box-shadow: inset 0 2px 3px rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.6);
+  }
+  .r1 { top:18px; left:18px; }
+  .r2 { top:18px; right:18px; }
+  .r3 { bottom:18px; left:18px; }
+  .r4 { bottom:18px; right:18px; }
+
+  .interior {
+    position: absolute;
+    inset: 20px;
+    background: linear-gradient(180deg, #1c0a00 0%, #0d0500 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #111;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+    opacity: 0;
+    transition: opacity 0.6s ease 1.2s;
+  }
+  .safe-wrap.open .interior { opacity: 1; }
+
+  .prize-content { text-align: center; }
+  .trophy { font-size: 5em; animation: bounce 1s ease-in-out infinite; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.1); }
+  }
+  .prize-content h2 {
+    font-size: 2em;
+    color: #d4a843;
+    text-shadow: 0 0 20px rgba(212,168,67,0.8);
+    margin-top: 10px;
+    letter-spacing: 2px;
+  }
+  .prize-content p {
+    color: #888;
+    margin-top: 8px;
+    font-size: 0.9em;
+  }
+
+  .shelf {
+    position: absolute;
+    height: 3px;
+    background: linear-gradient(to right, #2a1500, #5a3000, #2a1500);
+    border-radius: 2px;
+    left: 12px;
+    right: 12px;
+  }
+  .shelf1 { top: 38%; }
+  .shelf2 { top: 65%; }
+
+  /* === PORTA === */
+  .safe-door {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(150deg, #5c5c5c 0%, #3a3a3a 35%, #2e2e2e 70%, #222 100%);
+    border-radius: 18px;
+    border: 6px solid #111;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      inset 4px 4px 16px rgba(255,255,255,0.07),
+      inset -6px -6px 20px rgba(0,0,0,0.6),
+      8px 0 30px rgba(0,0,0,0.8);
+    z-index: 10;
+  }
+  .safe-wrap.open .safe-door {
+    transform: rotateY(-140deg);
+  }
+
+  .door-frame {
+    position: absolute;
+    inset: 14px;
+    border-radius: 10px;
+    border: 3px solid #222;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+  }
+
+  .door-rivet {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle at 35% 35%, #999, #444);
+    border-radius: 50%;
+    border: 2px solid #1a1a1a;
+    box-shadow: inset 0 2px 3px rgba(255,255,255,0.2), 0 3px 6px rgba(0,0,0,0.7);
+  }
+  .dr1 { top:20px; left:20px; }
+  .dr2 { top:20px; right:20px; }
+  .dr3 { bottom:20px; left:20px; }
+  .dr4 { bottom:20px; right:20px; }
+
+  /* === MANOPOLA === */
+  .dial-assembly {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -65%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dial-outer {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle at 35% 30%, #7a7a7a, #2a2a2a 70%);
+    border-radius: 50%;
+    border: 5px solid #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow:
+      0 8px 25px rgba(0,0,0,0.8),
+      inset 0 3px 8px rgba(255,255,255,0.12),
+      inset 0 -5px 12px rgba(0,0,0,0.6);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .dial-outer::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+      #444 0deg 5deg,
+      transparent 5deg 15deg
+    );
+    opacity: 0.4;
+  }
+
+  .dial-inner {
+    width: 75px;
+    height: 75px;
+    background: radial-gradient(circle at 35% 30%, #666, #1a1a1a 80%);
+    border-radius: 50%;
+    border: 4px solid #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.7), inset 0 2px 5px rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 2;
+  }
+
+  .dial-dot {
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 35% 35%, #d4a843, #8a6a20);
+    border-radius: 50%;
+    border: 2px solid #111;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.3);
+  }
+
+  .dial-indicator {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 30px;
+    background: linear-gradient(to bottom, #e84040, #8a2020);
+    border-radius: 3px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(232,64,64,0.5);
+  }
+
+  .lever-bar {
+    width: 100px;
+    height: 22px;
+    background: linear-gradient(to bottom, #777, #333);
+    border-radius: 11px;
+    border: 3px solid #222;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.1);
+    position: relative;
+    margin-top: 24px;
+  }
+  .lever-bar::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 12px;
+    right: 12px;
+    height: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+  }
+
+  /* === PANNELLO DIGITALE SULLA PORTA ===
+     Larghezza aumentata a 420px, input ridotti a 18px
+     per garantire che tutti e 10 stiano su una riga */
+  .keypad-panel {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460px;
+    background: linear-gradient(160deg, #1a1a1a, #0d0d0d);
+    border-radius: 10px;
+    border: 3px solid #222;
+    padding: 16px 18px;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.5);
+  }
+
+  .keypad-label {
+    color: #888;
+    font-size: 0.75em;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .code-slots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: nowrap;      /* NESSUN a-capo */
+    white-space: nowrap;
+  }
+
+  .code-slots input {
+    width: 40px;
+    height: 48px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    background: #050d05;
+    color: #00ff66;
+    border: 1px solid #1a3a1a;
+    border-radius: 4px;
+    text-transform: uppercase;
+    caret-color: #00ff66;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: 'Courier New', monospace;
+    flex-shrink: 0;
+  }
+  .code-slots input:focus {
+    border-color: #00ff66;
+    box-shadow: 0 0 8px rgba(0,255,102,0.4);
+  }
+
+  .led-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1a3a1a;
+    border: 1px solid #111;
+    transition: all 0.3s;
+  }
+  .led.ok  { background: #00ff66; box-shadow: 0 0 6px #00ff66; }
+  .led.err { background: #ff4040; box-shadow: 0 0 6px #ff4040; }
+  .led-text { color: #555; font-size: 0.6em; letter-spacing: 1px; font-family: monospace; }
+  .led-text.ok  { color: #00ff66; }
+  .led-text.err { color: #ff4040; }
+
+  /* === PULSANTE APRI === */
+  .open-btn {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    padding: 10px 0;
+    background: linear-gradient(160deg, #8a6a20, #5a4010);
+    color: #d4a843;
+    border: 2px solid #6a5018;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 3px rgba(255,255,255,0.1);
+  }
+  .open-btn:hover {
+    background: linear-gradient(160deg, #a07828, #6a4c18);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.7), 0 0 12px rgba(212,168,67,0.25);
+  }
+  .open-btn:active { transform: translateX(-50%) scale(0.97); }
+
+  .keyhole {
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 48px;
+    background: #0a0a0a;
+    border-radius: 12px 12px 4px 4px;
+    border: 2px solid #1a1a1a;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
+  }
+  .keyhole::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 12px;
+    background: #0a0a0a;
+    border-radius: 50% 50% 3px 3px;
+    border: 2px solid #1a1a1a;
+  }
+
+  .plate {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 22px;
+    background: linear-gradient(to bottom, #c8a032, #8a6a20);
+    border-radius: 4px;
+    border: 2px solid #5a4010;
+    color: #1a0d00;
+    font-size: 0.75em;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+
+  /* Reset button */
+  .reset-btn {
+    margin-top: 16px;
+    padding: 9px 22px;
+    background: #222;
+    color: #666;
+    border: 1px solid #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    display: none;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { background: #333; color: #aaa; }
+  .reset-btn.show { display: inline-block; }
+
+  .confetti-piece {
+    position: fixed;
+    width: 9px;
+    height: 9px;
+    top: -10px;
+    animation: fall linear forwards;
+    pointer-events: none;
+  }
+  @keyframes fall {
+    to { transform: translateY(105vh) rotate(800deg); }
+  }
+</style>
+</head>
+<body>
+
+<a href="stanza_misteri.html" class="back-btn">← Torna alla Stanza dei Misteri</a>
+
+<h1>La Cassaforte Segreta</h1>
+
+<div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:center;gap:24px;width:100%;padding:0 16px 40px;box-sizing:border-box;">
+
+  <!-- INDICAZIONI SINISTRA -->
+  <div style="flex:0 0 200px;width:200px;background:rgba(255,255,255,0.06);border:2px solid rgba(212,168,67,0.5);border-radius:12px;padding:18px 16px;margin-top:10px;">
+    <div style="font-size:0.78em;font-weight:700;color:#d4a843;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;text-align:center;border-bottom:1px solid rgba(212,168,67,0.3);padding-bottom:10px;">🔑 Indizi per il codice</div>
+    <ol class="hints-list">
+      <li><span class="num">1</span>Secondo coefficiente stechiometrico presente nella reazione redox della prima pergamena</li>
+      <li><span class="num">2</span>Somma di tutti i coefficienti della settima pergamena</li>
+      <li><span class="num">3</span>Numero intero della soluzione del quesito della terza pergamena</li>
+      <li><span class="num">4</span>Numero totale degli atomi nella seconda molecola della reazione redox (considerare anche il coefficiente stechiometrico che la precede)</li>
+      <li><span class="num">5</span>Soluzione della quinta pergamena</li>
+    </ol>
+  </div>
+
+  <!-- CASSAFORTE -->
+  <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;"><div class="scene">
+    <div class="safe-wrap" id="safe">
+
+    <!-- Corpo (visibile quando la porta è aperta) -->
+    <div class="safe-body">
+      <div class="rivet r1"></div>
+      <div class="rivet r2"></div>
+      <div class="rivet r3"></div>
+      <div class="rivet r4"></div>
+      <div class="interior" id="interior">
+        <div class="prize-content">
+          <div class="trophy">🏆</div>
+          <h2>COMPLIMENTI!</h2>
+          <p>Hai aperto la cassaforte!</p>
+        </div>
+        <div class="shelf shelf1"></div>
+        <div class="shelf shelf2"></div>
+      </div>
+    </div>
+
+    <!-- Porta -->
+    <div class="safe-door" id="safeDoor">
+      <div class="door-frame"></div>
+      <div class="door-rivet dr1"></div>
+      <div class="door-rivet dr2"></div>
+      <div class="door-rivet dr3"></div>
+      <div class="door-rivet dr4"></div>
+      <div class="plate">Cassaforte della Classe 2R</div>
+
+      <!-- Manopola -->
+      <div class="dial-assembly">
+        <div class="dial-outer" id="dial">
+          <div class="dial-indicator"></div>
+          <div class="dial-inner">
+            <div class="dial-dot"></div>
+          </div>
+        </div>
+        <div class="lever-bar"></div>
+      </div>
+
+      <!-- Serratura decorativa -->
+      <div class="keyhole"></div>
+
+      <!-- Pannello digitale sulla porta -->
+      <div class="keypad-panel">
+        <div class="keypad-label">Codice di accesso</div>
+        <div class="code-slots" id="doorSlots"></div>
+        <div class="led-row">
+          <div class="led" id="doorLed"></div>
+          <span class="led-text" id="doorLedText">PRONTO</span>
+        </div>
+      </div>
+
+      <!-- Pulsante apri -->
+      <button class="open-btn" onclick="checkCode()">Apri la cassaforte</button>
+    </div>
+
+  </div><!-- fine safe-wrap -->
+  </div><!-- fine scene --></div>
+
+  <!-- INDICAZIONI DESTRA -->
+  <div style="flex:0 0 200px;width:200px;background:rgba(255,255,255,0.06);border:2px solid rgba(212,168,67,0.5);border-radius:12px;padding:18px 16px;margin-top:10px;">
+    <div style="font-size:0.78em;font-weight:700;color:#d4a843;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;text-align:center;border-bottom:1px solid rgba(212,168,67,0.3);padding-bottom:10px;">🔑 Indizi per il codice</div>
+    <ol class="hints-list" start="6">
+      <li><span class="num">6</span>Quinta lettera del nome tradizionale del composto della quarta pergamena</li>
+      <li><span class="num">7</span>Settimo coefficiente stechiometrico presente nella reazione redox</li>
+      <li><span class="num">8</span>Numero intero soluzione della seconda pergamena</li>
+      <li><span class="num">9</span>Primo numero intero soluzione della sesta pergamena</li>
+      <li><span class="num">10</span>Quindicesima lettera del nome tradizionale del composto della quarta pergamena</li>
+    </ol>
+  </div>
+
+</div><!-- fine cassaforte-layout -->
+
+<button class="reset-btn" id="resetBtn" onclick="resetSafe()">🔄 Riprova</button>
+
+<script>
+  // ═══════════════════════════════════════════
+  // 🔐 CAMBIA QUI IL CODICE SEGRETO
+  // ═══════════════════════════════════════════
+  const SECRET_CODE = "ABC1234XYZ";
+  // ═══════════════════════════════════════════
+
+  const LEN = SECRET_CODE.length;
+
+  // Genera gli input sul pannello porta
+  const doorSlots = document.getElementById('doorSlots');
+  for (let i = 0; i < LEN; i++) {
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.maxLength = 1;
+    inp.id = 'ds' + i;
+    inp.addEventListener('input', function() {
+      this.value = this.value.toUpperCase();
+      if (this.value && i < LEN - 1) document.getElementById('ds' + (i+1)).focus();
+      updateDoorLed();
+    });
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && i > 0) document.getElementById('ds' + (i-1)).focus();
+      if (e.key === 'Enter') checkCode();
+    });
+    doorSlots.appendChild(inp);
+  }
+
+  // Rotazione manopola decorativa al clic
+  let dialAngle = 0;
+  document.getElementById('dial').addEventListener('click', () => {
+    dialAngle += 45;
+    document.getElementById('dial').style.transform = `rotate(${dialAngle}deg)`;
+  });
+
+  function getCode() {
+    let c = '';
+    for (let i = 0; i < LEN; i++) c += (document.getElementById('ds' + i).value || '');
+    return c.toUpperCase();
+  }
+
+  function updateDoorLed() {
+    const filled = getCode().length;
+    const led = document.getElementById('doorLed');
+    const txt = document.getElementById('doorLedText');
+    if (filled === LEN) {
+      led.className = 'led ok';
+      txt.className = 'led-text ok';
+      txt.textContent = 'PRONTO';
+    } else {
+      led.className = 'led';
+      txt.className = 'led-text';
+      txt.textContent = filled + '/' + LEN;
+    }
+  }
+
+  function checkCode() {
+    const entered = getCode();
+    const led = document.getElementById('doorLed');
+    const txt = document.getElementById('doorLedText');
+
+    if (entered.length < LEN) {
+      led.className = 'led err';
+      txt.className = 'led-text err';
+      txt.textContent = 'INCOMPLETO';
+      return;
+    }
+
+    if (entered === SECRET_CODE.toUpperCase()) {
+      led.className = 'led ok';
+      txt.className = 'led-text ok';
+      txt.textContent = 'ACCESSO OK';
+      playApplause();
+      setTimeout(() => {
+        document.getElementById('safe').classList.add('open');
+        document.getElementById('resetBtn').classList.add('show');
+        createConfetti();
+      }, 600);
+    } else {
+      led.className = 'led err';
+      txt.className = 'led-text err';
+      txt.textContent = 'ERRORE';
+      playError();
+      const dial = document.getElementById('dial');
+      dial.style.transform = `rotate(${dialAngle + 15}deg)`;
+      setTimeout(() => dial.style.transform = `rotate(${dialAngle}deg)`, 300);
+      setTimeout(() => {
+        for (let i = 0; i < LEN; i++) document.getElementById('ds' + i).value = '';
+        document.getElementById('ds0').focus();
+        updateDoorLed();
+      }, 900);
+    }
+  }
+
+  function createConfetti() {
+    const colors = ['#d4a843','#e84040','#00ff88','#4488ff','#ff69b4','#ffd700'];
+    for (let i = 0; i < 90; i++) {
+      setTimeout(() => {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+      }, i * 35);
+    }
+  }
+
+  function resetSafe() {
+    document.getElementById('safe').classList.remove('open');
+    document.getElementById('resetBtn').classList.remove('show');
+    const led = document.getElementById('doorLed');
+    const txt = document.getElementById('doorLedText');
+    led.className = 'led';
+    txt.className = 'led-text';
+    txt.textContent = 'PRONTO';
+    for (let i = 0; i < LEN; i++) document.getElementById('ds' + i).value = '';
+    document.getElementById('ds0').focus();
+  }
+
+  document.getElementById('ds0').focus();
+
+  // === SUONI — AudioContext creato DENTRO il gesto utente per evitare il blocco del browser ===
+  let _ac = null;
+  function getAC() {
+    if (!_ac) _ac = new (window.AudioContext || window.webkitAudioContext)();
+    if (_ac.state === 'suspended') _ac.resume();
+    return _ac;
+  }
+
+  function playError() {
+    const ac = getAC();
+    [440, 330, 220].forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const g   = ac.createGain();
+      osc.connect(g); g.connect(ac.destination);
+      osc.type = 'sawtooth';
+      const t = ac.currentTime + i * 0.14;
+      osc.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.4, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.13);
+      osc.start(t); osc.stop(t + 0.14);
+    });
+  }
+
+  function playApplause() {
+    const ac = getAC();
+    const t0 = ac.currentTime + 0.05;
+    function n(freq, start, dur, type, vol) {
+      const o = ac.createOscillator();
+      const g = ac.createGain();
+      o.connect(g); g.connect(ac.destination);
+      o.type = type;
+      o.frequency.setValueAtTime(freq, t0+start);
+      g.gain.setValueAtTime(0, t0+start);
+      g.gain.linearRampToValueAtTime(vol, t0+start+0.02);
+      g.gain.setValueAtTime(vol, t0+start+dur-0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t0+start+dur+0.05);
+      o.start(t0+start); o.stop(t0+start+dur+0.1);
+    }
+    // Fanfara trionfale — melodia
+    const M = [
+      [523,0,.15],[523,.17,.15],[523,.34,.15],[415,.51,.45],
+      [622,.98,.15],[622,1.15,.15],[622,1.32,.15],[523,1.49,.45],
+      [698,1.96,.15],[698,2.13,.15],[698,2.30,.15],[622,2.47,.3],
+      [523,2.79,.15],[622,2.96,.15],[698,3.13,.15],[880,3.30,.6],
+      [784,3.92,.15],[698,4.09,.15],[659,4.26,.15],[622,4.43,.15],
+      [698,4.62,.9],
+      [523,5.54,.15],[523,5.71,.15],[523,5.88,.15],[415,6.05,.45],
+      [622,6.52,.15],[622,6.69,.15],[622,6.86,.15],[523,7.03,.45],
+      [784,7.50,.3],[698,7.82,.3],[880,8.14,.9]
+    ];
+    M.forEach(([f,s,d]) => n(f,s,d,'sawtooth',0.18));
+    M.forEach(([f,s,d]) => n(f*0.75,s,d,'sawtooth',0.1));
+  }
+</script>
+</body>
+</html>
