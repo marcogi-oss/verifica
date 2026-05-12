@@ -597,38 +597,43 @@
 
   <!-- PROF 1: Tu — rasato, barba piena scura, occhiali rettangolari (bordo TOP) -->
   <svg id="prof1" class="prof" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="28" cy="14" rx="10" ry="10" fill="#d4956a"/>
-    <ellipse cx="23" cy="10" rx="3" ry="1.8" fill="rgba(255,255,255,0.15)" transform="rotate(-20,23,10)"/>
-    <rect x="18" y="12" width="8" height="5.5" rx="0.8" fill="none" stroke="#222" stroke-width="1.4"/>
-    <rect x="29" y="12" width="8" height="5.5" rx="0.8" fill="none" stroke="#222" stroke-width="1.4"/>
-    <line x1="26" y1="14.5" x2="29" y2="14.5" stroke="#222" stroke-width="1.4"/>
-    <line x1="18" y1="14.5" x2="16" y2="13.5" stroke="#222" stroke-width="1.4"/>
-    <line x1="37" y1="14.5" x2="39" y2="13.5" stroke="#222" stroke-width="1.4"/>
-    <ellipse cx="22" cy="14.5" rx="1.3" ry="1.5" fill="#111"/>
-    <ellipse cx="33" cy="14.5" rx="1.3" ry="1.5" fill="#111"/>
-    <!-- Barba scura piena e spessa -->
-    <path d="M17 18 Q16 26 19 29 Q22 32 28 33 Q34 32 37 29 Q40 26 39 18 Q35 22 28 23 Q21 22 17 18Z" fill="#1a0e05"/>
-    <path d="M20 19 Q21 24 23 27" stroke="#2d1a08" stroke-width="1.2" fill="none"/>
-    <path d="M36 19 Q35 24 33 27" stroke="#2d1a08" stroke-width="1.2" fill="none"/>
-    <path d="M20 18.5 Q24 21 28 20 Q32 21 36 18.5" stroke="#3a2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <rect x="18" y="33" width="20" height="14" rx="2" fill="#1e3060"/>
-    <polygon points="26,33 28,36 30,33" fill="white"/>
-    <polygon points="28,35 26.5,41 28,43 29.5,41" fill="#8b0000"/>
-    <g class="walk-arm-l" style="transform-origin:20px 34px">
-      <rect x="9" y="33" width="11" height="4" rx="2" fill="#1e3060"/>
-      <ellipse cx="10" cy="39" rx="3" ry="3" fill="#d4956a"/>
+    <!-- Testa rasata -->
+    <ellipse cx="28" cy="12" rx="9" ry="9" fill="#d4956a"/>
+    <ellipse cx="23" cy="8" rx="2.5" ry="1.5" fill="rgba(255,255,255,0.15)" transform="rotate(-20,23,8)"/>
+    <!-- Occhiali rettangolari -->
+    <rect x="18" y="10" width="7" height="4.5" rx="0.8" fill="none" stroke="#222" stroke-width="1.3"/>
+    <rect x="28" y="10" width="7" height="4.5" rx="0.8" fill="none" stroke="#222" stroke-width="1.3"/>
+    <line x1="25" y1="12" x2="28" y2="12" stroke="#222" stroke-width="1.3"/>
+    <line x1="18" y1="12" x2="16" y2="11" stroke="#222" stroke-width="1.3"/>
+    <line x1="35" y1="12" x2="37" y2="11" stroke="#222" stroke-width="1.3"/>
+    <ellipse cx="21.5" cy="12" rx="1.2" ry="1.3" fill="#111"/>
+    <ellipse cx="31.5" cy="12" rx="1.2" ry="1.3" fill="#111"/>
+    <!-- Barba contenuta che copre anche il collo -->
+    <path d="M20 16 Q19 20 21 22 Q23 25 28 26 Q33 25 35 22 Q37 20 36 16 Q33 18 28 19 Q23 18 20 16Z" fill="#1a0e05"/>
+    <path d="M21 16.5 Q24 18 28 17.5 Q32 18 35 16.5" stroke="#3a2010" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <!-- Collo coperto dalla barba -->
+    <rect x="24" y="22" width="8" height="4" rx="1" fill="#1a0e05"/>
+    <!-- Corpo/giacca — attaccato alla testa -->
+    <rect x="17" y="24" width="22" height="16" rx="2" fill="#1e3060"/>
+    <polygon points="25,24 28,27 31,24" fill="white"/>
+    <polygon points="28,26 26.5,32 28,34 29.5,32" fill="#8b0000"/>
+    <!-- Braccia -->
+    <g class="walk-arm-l" style="transform-origin:19px 25px">
+      <rect x="8" y="24" width="10" height="4" rx="2" fill="#1e3060"/>
+      <ellipse cx="9" cy="30" rx="3" ry="3" fill="#d4956a"/>
     </g>
-    <g class="walk-arm-r" style="transform-origin:36px 34px">
-      <rect x="36" y="33" width="11" height="4" rx="2" fill="#1e3060"/>
-      <ellipse cx="46" cy="39" rx="3" ry="3" fill="#d4956a"/>
+    <g class="walk-arm-r" style="transform-origin:37px 25px">
+      <rect x="38" y="24" width="10" height="4" rx="2" fill="#1e3060"/>
+      <ellipse cx="47" cy="30" rx="3" ry="3" fill="#d4956a"/>
     </g>
-    <g class="walk-legs-l" style="transform-origin:23px 47px">
-      <rect x="19" y="47" width="7" height="8" rx="1" fill="#111"/>
-      <rect x="17" y="53" width="9" height="3" rx="1" fill="#3d2a00"/>
+    <!-- Gambe -->
+    <g class="walk-legs-l" style="transform-origin:23px 40px">
+      <rect x="18" y="40" width="7" height="10" rx="1" fill="#111"/>
+      <rect x="16" y="48" width="9" height="3" rx="1" fill="#3d2a00"/>
     </g>
-    <g class="walk-legs-r" style="transform-origin:33px 47px">
-      <rect x="30" y="47" width="7" height="8" rx="1" fill="#111"/>
-      <rect x="28" y="53" width="9" height="3" rx="1" fill="#3d2a00"/>
+    <g class="walk-legs-r" style="transform-origin:33px 40px">
+      <rect x="31" y="40" width="7" height="10" rx="1" fill="#111"/>
+      <rect x="29" y="48" width="9" height="3" rx="1" fill="#3d2a00"/>
     </g>
   </svg>
 
@@ -726,34 +731,33 @@
   <!-- HEADER -->
   <header>
     <a href="index.html" class="back-btn">← Torna all'Enigma del Castello</a>
-    <div class="candle-wrap">
-      <svg class="candle-svg" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
-        <!-- Fiamma esterna -->
-        <ellipse class="flame-outer" cx="30" cy="22" rx="10" ry="18" fill="#ffaa00" opacity="0.85"/>
-        <!-- Fiamma media -->
-        <ellipse class="flame-mid" cx="30" cy="25" rx="6" ry="12" fill="#ffdd00"/>
-        <!-- Fiamma interna -->
-        <ellipse class="flame-inner" cx="30" cy="28" rx="3" ry="7" fill="#fff4aa"/>
-        <!-- Stoppino -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:8px;">
+      <div class="candle-wrap" style="margin-bottom:0;">
+        <svg class="candle-svg" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse class="flame-outer" cx="30" cy="22" rx="10" ry="18" fill="#ffaa00" opacity="0.85" style="animation-delay:0s"/>
+        <ellipse class="flame-mid" cx="30" cy="25" rx="6" ry="12" fill="#ffdd00" style="animation-delay:0s"/>
+        <ellipse class="flame-inner" cx="30" cy="28" rx="3" ry="7" fill="#fff4aa" style="animation-delay:0s"/>
         <line x1="30" y1="35" x2="30" y2="40" stroke="#333" stroke-width="1.5"/>
-        <!-- Corpo candela -->
         <rect x="18" y="40" width="24" height="50" rx="3" fill="#f5f0e8"/>
-        <rect x="18" y="40" width="24" height="50" rx="3" fill="url(#candleGrad)"/>
-        <!-- Gocciolatura cera -->
         <ellipse cx="30" cy="40" rx="13" ry="4" fill="#e8e0d0"/>
         <path d="M22 44 Q20 52 21 58" stroke="#e0d8c8" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <!-- Bagliore -->
-        <ellipse class="glow" cx="30" cy="28" rx="18" ry="22" fill="rgba(255,200,50,0.12)"/>
-        <defs>
-          <linearGradient id="candleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="rgba(0,0,0,0.12)"/>
-            <stop offset="40%" stop-color="rgba(255,255,255,0.1)"/>
-            <stop offset="100%" stop-color="rgba(0,0,0,0.08)"/>
-          </linearGradient>
-        </defs>
+        <ellipse class="glow" cx="30" cy="28" rx="18" ry="22" fill="rgba(255,200,50,0.12)" style="animation-delay:0s"/>
       </svg>
+      </div>
+      <h1>La Stanza dei Misteri</h1>
+      <div class="candle-wrap" style="margin-bottom:0;">
+        <svg class="candle-svg" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse class="flame-outer" cx="30" cy="22" rx="10" ry="18" fill="#ffaa00" opacity="0.85" style="animation-delay:0.4s"/>
+        <ellipse class="flame-mid" cx="30" cy="25" rx="6" ry="12" fill="#ffdd00" style="animation-delay:0.4s"/>
+        <ellipse class="flame-inner" cx="30" cy="28" rx="3" ry="7" fill="#fff4aa" style="animation-delay:0.4s"/>
+        <line x1="30" y1="35" x2="30" y2="40" stroke="#333" stroke-width="1.5"/>
+        <rect x="18" y="40" width="24" height="50" rx="3" fill="#f5f0e8"/>
+        <ellipse cx="30" cy="40" rx="13" ry="4" fill="#e8e0d0"/>
+        <path d="M22 44 Q20 52 21 58" stroke="#e0d8c8" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <ellipse class="glow" cx="30" cy="28" rx="18" ry="22" fill="rgba(255,200,50,0.12)" style="animation-delay:0.4s"/>
+      </svg>
+      </div>
     </div>
-    <h1>La Stanza dei Misteri</h1>
     <p class="header-intro">Una volta trovata la cassaforte bisognerà inserire la combinazione, costituita da una sequenza di 10 lettere/numeri.<br>Risolvi i quesiti seguenti e riporta i valori richiesti.</p>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="progressFill"></div>
@@ -803,7 +807,7 @@ const QUESTIONS = [
   "Calcola i mg di Ba(OH)₂ contenuti in 500 mL di una soluzione acquosa a pH = 10.",
   "Scrivi il nome tradizionale del seguente composto: HgClO₂.",
   "Se si diminuisce di un milione di volte la concentrazione di ioni OH⁻ in una soluzione con un pH iniziale di 8, qual è il valore finale di pH?",
-  "Qual è il valore di pH che deve avere una soluzione di idrossido di bario del volume di 400 mL per neutralizzare completamente 150 mL di una soluzione di H₂SO₄ il cui pH è uguale a 3?",
+  "Qual è il valore di pH che deve avere una soluzione di idrossido di bario del volume di 400 mL per neutralizzare completamente 150 mL di una soluzione di H₂SO₄ il cui pH è uguale a 4,2?",
   "Completa e bilancia la seguente reazione:\n\nacido solforico + idrossido di alluminio → ________ + ________"
 ];
 // ═══════════════════════════════════════════════════════════
