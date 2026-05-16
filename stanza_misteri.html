@@ -805,16 +805,19 @@ const QUESTIONS = [
   "Scrivi il nome tradizionale del seguente composto: HgClO₂.",
   "Se si diminuisce di un milione di volte la concentrazione di ioni OH⁻ in una soluzione con un pH iniziale di 8, qual è il valore finale di pH?",
   "Qual è il valore di pH che deve avere una soluzione di idrossido di bario del volume di 400 mL per neutralizzare completamente 150 mL di una soluzione di H₂SO₄ il cui pH è uguale a 4,2?",
-  "Completa e bilancia la seguente reazione:\n\nacido solforico + idrossido di alluminio → ________ + ________"
+  "Completa e bilancia la seguente reazione:\n\nacido solforico + idrossido di alluminio → ________ + ________",
+  "Una reazione ha la seguente legge della velocità:\n\nvelocità = k [A]² [B]² [C]\n\nCon quali unità viene espressa la costante di velocità? Utilizzare \"M\" e non moli/l.",
+  "Un elettrolita forte A in acqua si dissocia secondo la reazione:\n\nA → nB\n\ndove n è il numero di moli di particelle B prodotto dalla dissociazione di una mole di elettrolita A.\nLa soluzione preparata sciogliendo 0,05 moli di elettrolita A in H₂O fino ad ottenere un volume di soluzione pari a 500 mL ha una pressione osmotica pari a 7,34 atm alla temperatura di 25 °C.\nCalcolare n.",
+  "Scrivi la formula del piroantimonito di bario."
 ];
 // ═══════════════════════════════════════════════════════════
 
-const answers = Array(7).fill('');
+const answers = Array(10).fill('');
 let currentDoor = null;
 
 // Costruisci le pergamene
 const grid = document.getElementById('doorsGrid');
-for (let i = 0; i < 7; i++) {
+for (let i = 0; i < 10; i++) {
   const wrap = document.createElement('div');
   wrap.className = 'door-wrap';
   wrap.id = 'door-wrap-' + i;
@@ -862,8 +865,8 @@ function saveAnswer() {
 
 function updateProgress() {
   const done = answers.filter(a => a !== '').length;
-  document.getElementById('progressFill').style.width = (done / 7 * 100) + '%';
-  document.getElementById('progressLabel').textContent = `${done} / 7 domande completate`;
+  document.getElementById('progressFill').style.width = (done / 10 * 100) + '%';
+  document.getElementById('progressLabel').textContent = `${done} / 10 domande completate`;
   // Mostra riepilogo se almeno 1 risposta
   document.getElementById('summarySection').classList.toggle('visible', done > 0);
 }
@@ -890,7 +893,6 @@ function updateSummary() {
 (function() {
   const S = 112;
 
-  // Ogni professore parte sfasato di 1/4 del perimetro
   const profs = [
     { el: document.getElementById('prof1'), offset: 0,    speed: 1.2 },
     { el: document.getElementById('prof2'), offset: 0.25, speed: 1.2 },
@@ -898,44 +900,38 @@ function updateSummary() {
     { el: document.getElementById('prof4'), offset: 0.75, speed: 1.2 },
   ];
 
-  let progress = [0, 0, 0, 0];
+  // Inizializza progress con gli offset corretti
+  let progress = profs.map(p => p.offset);
+
+  function getWH() {
+    return {
+      W: window.innerWidth  || document.documentElement.clientWidth,
+      H: window.innerHeight || document.documentElement.clientHeight
+    };
+  }
 
   function getPos(t) {
-    // t va da 0 a 1 lungo il perimetro totale in senso orario
-    // Top: sx→dx,  Right: su→giù,  Bottom: dx→sx,  Left: giù→su
-    const W = window.innerWidth;
-    const H = window.innerHeight;
+    const { W, H } = getWH();
     const segT = W - S;
     const segR = H - S;
     const segB = W - S;
     const segL = H - S;
     const perim = segT + segR + segB + segL;
     const d = ((t % 1) + 1) % 1 * perim;
-
-    if (d < segT) {
-      // Bordo TOP → va da sinistra a destra, piedi in su
+    if (d < segT)
       return { x: d, y: 0, a: 180 };
-    } else if (d < segT + segR) {
-      // Bordo RIGHT → va dall'alto al basso, piedi a destra
+    else if (d < segT + segR)
       return { x: W - S, y: d - segT, a: 270 };
-    } else if (d < segT + segR + segB) {
-      // Bordo BOTTOM → va da destra a sinistra, piedi in giù
+    else if (d < segT + segR + segB)
       return { x: W - S - (d - segT - segR), y: H - S, a: 0 };
-    } else {
-      // Bordo LEFT → va dal basso verso l'alto, piedi a sinistra
+    else
       return { x: 0, y: H - S - (d - segT - segR - segB), a: 90 };
-    }
   }
 
   function getPerim() {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-    return 2*(W-S) + 2*(H-S);
+    const { W, H } = getWH();
+    return 2 * (W - S) + 2 * (H - S);
   }
-
-  profs.forEach((p, i) => {
-    progress[i] = p.offset;
-  });
 
   function animate() {
     const perim = getPerim();
