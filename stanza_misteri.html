@@ -591,7 +591,6 @@
 </head>
 <body>
 
-<audio id="voceProf" preload="auto"><source src="voce.mp3" type="audio/mpeg"></audio>
 <div class="room">
   <div class="torch torch-left"></div>
   <div class="torch torch-right"></div>
@@ -697,6 +696,50 @@
     <g class="walk-legs-r" style="transform-origin:33px 38px">
       <rect x="30" y="38" width="7" height="9" rx="1" fill="#1a2a40"/>
       <rect x="28" y="45" width="9" height="3" rx="1" fill="#3d2a00"/>
+    </g>
+  </svg>
+
+
+  <!-- PROF 5: Prof.ssa religione — capelli grigi ricci corti, occhiali (bordo TOP, sfasata) -->
+  <svg id="prof5" class="prof" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <!-- Capelli ricci grigi CORTI — solo sulla sommità, non ai lati -->
+    <circle cx="22" cy="10" r="6" fill="#aaaaaa"/>
+    <circle cx="28" cy="8"  r="6" fill="#aaaaaa"/>
+    <circle cx="34" cy="10" r="6" fill="#aaaaaa"/>
+    <circle cx="19" cy="14" r="5" fill="#aaaaaa"/>
+    <circle cx="37" cy="14" r="5" fill="#aaaaaa"/>
+    <!-- Testa -->
+    <ellipse cx="28" cy="17" rx="10" ry="10" fill="#f0c090"/>
+    <!-- Occhiali tondi -->
+    <circle cx="23" cy="16" r="3.5" fill="none" stroke="#5a3a10" stroke-width="1.3"/>
+    <circle cx="33" cy="16" r="3.5" fill="none" stroke="#5a3a10" stroke-width="1.3"/>
+    <line x1="26.5" y1="16" x2="29.5" y2="16" stroke="#5a3a10" stroke-width="1.3"/>
+    <line x1="19.5" y1="15" x2="17.5" y2="14" stroke="#5a3a10" stroke-width="1.3"/>
+    <line x1="36.5" y1="15" x2="38.5" y2="14" stroke="#5a3a10" stroke-width="1.3"/>
+    <ellipse cx="23" cy="16" rx="1.2" ry="1.3" fill="#222"/>
+    <ellipse cx="33" cy="16" rx="1.2" ry="1.3" fill="#222"/>
+    <!-- Sorriso -->
+    <path d="M24 21 Q28 23.5 32 21" stroke="#c07060" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <!-- Corpo -->
+    <rect x="17" y="27" width="22" height="14" rx="2" fill="#4a2060"/>
+    <polygon points="25,27 28,30 31,27" fill="white"/>
+    <!-- Braccia -->
+    <g class="walk-arm-l" style="transform-origin:19px 28px">
+      <rect x="8"  y="27" width="11" height="4" rx="2" fill="#4a2060"/>
+      <ellipse cx="9"  cy="33" rx="3" ry="3" fill="#f0c090"/>
+    </g>
+    <g class="walk-arm-r" style="transform-origin:37px 28px">
+      <rect x="37" y="27" width="11" height="4" rx="2" fill="#4a2060"/>
+      <ellipse cx="47" cy="33" rx="3" ry="3" fill="#f0c090"/>
+    </g>
+    <!-- Gambe -->
+    <g class="walk-legs-l" style="transform-origin:23px 41px">
+      <rect x="18" y="41" width="7" height="9" rx="1" fill="#2a1040"/>
+      <rect x="16" y="48" width="9" height="3" rx="1" fill="#111"/>
+    </g>
+    <g class="walk-legs-r" style="transform-origin:33px 41px">
+      <rect x="31" y="41" width="7" height="9" rx="1" fill="#2a1040"/>
+      <rect x="29" y="48" width="9" height="3" rx="1" fill="#111"/>
     </g>
   </svg>
 
@@ -899,6 +942,7 @@ function updateSummary() {
     { el: document.getElementById('prof2'), offset: 0.25, speed: 1.2 },
     { el: document.getElementById('prof3'), offset: 0.5,  speed: 1.2 },
     { el: document.getElementById('prof4'), offset: 0.75, speed: 1.2 },
+    { el: document.getElementById('prof5'), offset: 0.1,  speed: 1.0 },
   ];
 
   // Inizializza progress con gli offset corretti
@@ -946,11 +990,6 @@ function updateSummary() {
     requestAnimationFrame(animate);
   }
   animate();
-  document.getElementById('prof1').addEventListener('click', function() {
-    const a = document.getElementById('voceProf');
-    a.currentTime = 0;
-    a.play();
-  });
 })();
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
